@@ -4,6 +4,8 @@ import random
 import requests
 
 max_ner_features = 20
+server = "http://localhost:2221"
+server = "http://tt-k8s1-m1.ko.seznam.cz:30505"
 
 ner_ham = json.load(open("ner-ham.json", "r"))
 ner_phish = json.load(open("ner-phish.json", "r"))
@@ -62,7 +64,7 @@ for i in feat:
             "content": "\n".join(f.readlines()),
             "tags": ner_phish.get(i[1], []) if i[2] else ner_ham.get(i[1], []),
         }
-        remote_pred = requests.post("http://localhost:2221/detect",
+        remote_pred = requests.post(server + "/detect",
                                     json=d).json().get("result", None)
     if local_pred != remote_pred:
         print("bad pred !!!")
